@@ -1,0 +1,70 @@
+
+
+<?php $__env->startSection('content'); ?>
+
+
+
+<div class="max-w-7xl mx-auto py-10 sm:px-6 lg:px-8">
+    <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg p-6">
+        <div class="flex items-center justify-between mb-6">
+            <h2 class="text-2xl font-semibold text-gray-800">Result Management</h2>
+            <a href="<?php echo e(route('results.create')); ?>"
+                class="bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded transition duration-200">
+                Add New Result
+            </a>
+        </div>
+
+        <?php if(session('success')): ?>
+            <div class="mb-4 p-4 bg-green-100 text-green-800 border border-green-200 rounded">
+                <?php echo e(session('success')); ?>
+
+            </div>
+        <?php endif; ?>
+
+        <div class="overflow-x-auto">
+            <table class="min-w-full text-sm text-left border border-gray-200 bg-white shadow-sm">
+                <thead class="bg-gray-100 text-gray-700 uppercase text-xs">
+                    <tr>
+                        <th class="px-6 py-3 border-b">#</th>
+                        <th class="px-6 py-3 border-b">Student</th>
+                        <th class="px-6 py-3 border-b">Course</th>
+                        <th class="px-6 py-3 border-b">Grade</th>
+                        <th class="px-6 py-3 border-b">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php $__currentLoopData = $results; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $result): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                        <tr class="border-b hover:bg-gray-50">
+                            <td class="px-6 py-3"><?php echo e($loop->iteration); ?></td>
+                            <td class="px-6 py-3"><?php echo e($result->student->name ?? 'N/A'); ?></td>
+                            <td class="px-6 py-3"><?php echo e($result->course->title ?? 'N/A'); ?></td>
+                            <td class="px-6 py-3 font-semibold"><?php echo e($result->grade); ?></td>
+                            <td class="px-6 py-3">
+                                <a href="<?php echo e(route('results.edit', $result->id)); ?>"
+                                    class="bg-yellow-400 hover:bg-yellow-500 text-white px-3 py-1 rounded text-xs mr-1">
+                                    Edit
+                                </a>
+                                <form action="<?php echo e(route('results.destroy', $result->id)); ?>" method="POST" class="inline-block">
+                                    <?php echo csrf_field(); ?>
+                                    <?php echo method_field('DELETE'); ?>
+                                    <button onclick="return confirm('Are you sure?')"
+                                        class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded text-xs">
+                                        Delete
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                    <?php if($results->isEmpty()): ?>
+                        <tr>
+                            <td colspan="5" class="text-center py-4 text-gray-500">No results found.</td>
+                        </tr>
+                    <?php endif; ?>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('layouts.app', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\xampp\htdocs\exam_result_system\resources\views/results/index.blade.php ENDPATH**/ ?>
